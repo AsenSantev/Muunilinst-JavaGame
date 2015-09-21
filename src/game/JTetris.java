@@ -1,7 +1,5 @@
 package game;
 
-
-
 import enums.Controls;
 
 import javax.swing.*;
@@ -10,8 +8,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 import java.util.Random;
 
 /**
@@ -24,12 +21,12 @@ import java.util.Random;
 
 /*
  Implementation notes:
- -The "currentPiece" points to a piece that is
+ - The "currentPiece" points to a piece that is
  currently falling, or is null when there is no piece.
- -tick() moves the current piece
- -a timer object calls tick(DOWN) periodically
- -keystrokes call tick with LEFT, RIGHT, etc.
- -Board.undo() is used to remove the piece from its
+ - tick() moves the current piece
+ - a timer object calls tick(DOWN) periodically
+ - keystrokes call tick with LEFT, RIGHT, etc.
+ - Board.undo() is used to remove the piece from its
  old position and then Board.place() is used to install
  the piece in its new position.
 */
@@ -38,7 +35,6 @@ public class JTetris extends JComponent {
     private boolean running = false;
 
     public static JTetris tetris;
-    //States
     // size of the board in blocks
     public static final int WIDTH = 10;
     public static final int HEIGHT = 20;
@@ -74,24 +70,21 @@ public class JTetris extends JComponent {
 
     // State of the game
     protected boolean gameOn;    // true if we are playing
-    public int count;        // how many pieces played so far
+    public int count;            // how many pieces played so far
     protected long startTime;    // used to measure elapsed time
-    public Random random;    // the random generator for new pieces
+    public Random random;        // the random generator for new pieces
 
     // Controls
     protected JLabel countLabel;
     protected JLabel timeLabel;
-    protected JLabel buttonHelp;
     protected JButton startButton;
     protected JButton stopButton;
     protected javax.swing.Timer timer;
     protected JSlider speed;
 
-    //private static InputHandler inputHandler;
-
     public final int DELAY = 400;    // milliseconds per tick
 
-   public JTetris(int width, int height) {
+    public JTetris(int width, int height) {
         super();
 
         setPreferredSize(new Dimension(width, height));
@@ -101,65 +94,6 @@ public class JTetris extends JComponent {
         board = new Board(WIDTH, HEIGHT + TOP_SPACE);
     }
 
-//    //Initializes all the graphics and it will get
-//    //everything ready for our game
-//    private void init() {
-//        gameOn = false;
-//
-//        pieces = Piece.getPieces();
-//        board = new Board(WIDTH, HEIGHT + TOP_SPACE);
-//
-//
-//        this.inputHandler = new InputHandler(this);
-//
-//
-//    }
-//
-//    public void run() {
-//        init();
-//
-//        //Sets the frames per seconds
-//        int fps = 30;
-//        //1 000 000 000 nanoseconds in a second. Thus we measure time in nanoseconds
-//        //to be more specific. Maximum allowed time to run the tick() and render() methods
-//        double timePerTick = 1000000000.0 / fps;
-//        //How much time we have until we need to call our tick() and render() methods
-//        double delta = 0;
-//        //The current time in nanoseconds
-//        long now;
-//        //Returns the amount of time in nanoseconds that our computer runs.
-//        long lastTime = System.nanoTime();
-//        long timer = 0;
-//        int ticks = 0;
-//
-//        while (running) {
-//            //Sets the now variable to the current time in nanoseconds
-//            now = System.nanoTime();
-//            //Amount of time passed divided by the max amount of time allowed.
-//            delta += (now-lastTime) / timePerTick;
-//            //Adding to the timer the time passed
-//            timer += now - lastTime;
-//            //Setting the lastTime with the values of now time after we have calculated the delta
-//            lastTime = now;
-//
-//            //If enough time has passed we need to tick() and render() to achieve 60 fps
-//            if (delta >= 1) {
-//                //tick();
-//                //Reset the delta
-//                ticks++;
-//                delta--;
-//            }
-//
-//            if (timer >= 1000000000) {
-//                System.out.println("Ticks and Frames: " + ticks);
-//                ticks = 0;
-//                timer = 0;
-//            }
-//        }
-//
-//        //Calls the stop method to ensure everything has been stopped
-//        stopGame();
-//    }
     /**
      * Sets the internal state and starts the timer
      * so the game is happening.
@@ -174,8 +108,11 @@ public class JTetris extends JComponent {
         count = 0;
         gameOn = true;
 
-        if (testMode) random = new Random(0);    // same seq every time
-        else random = new Random();    // diff seq each game
+        if (testMode) {
+            random = new Random(0);    // same seq every time
+        } else {
+            random = new Random();    // diff seq each game
+        }
 
         enableButtons();
         timeLabel.setText(" ");
@@ -216,7 +153,7 @@ public class JTetris extends JComponent {
     public int setCurrentPiece(Piece piece, int x, int y) {
         int result = board.place(piece, x, y);
 
-        if (result <= Board.PLACE_ROW_FILLED) {    // SUCESS
+        if (result <= Board.PLACE_ROW_FILLED) {    // SUCCESS
             // repaint the rect where it used to be
             if (currentPiece != null) {
                 repaintPiece(currentPiece, currentX, currentY);
@@ -270,9 +207,6 @@ public class JTetris extends JComponent {
         // add the new piece to be in play
         int result = setCurrentPiece(piece, px, py);
 
-        // This probably never happens, since
-        // the blocks at the top allow space
-        // for new pieces to at least be added.
         if (result > Board.PLACE_ROW_FILLED) {
             stopGame();
         }
@@ -339,12 +273,6 @@ public class JTetris extends JComponent {
         }
     }
 
-//    public static final int ROTATE = 0;
-//    public static final int LEFT = 1;
-//    public static final int RIGHT = 2;
-//    public static final int DROP = 3;
-//    public static final int DOWN = 4;
-
     /**
      * Called to change the position of the current piece.
      * Each key press call this once with the verbs
@@ -386,7 +314,7 @@ public class JTetris extends JComponent {
                 board.place(currentPiece, currentX, currentY);
             }
         }
-		
+
 		/*
 		 How to detect when a piece has landed:
 		 if this move hits something on its DOWN verb,
@@ -396,8 +324,9 @@ public class JTetris extends JComponent {
 		*/
         if (failed && verb == Controls.DOWN && !moved) {    // it's landed
 
+            // repaint to show the result of the row clearing
             if (board.clearRows()) {
-                repaint();    // repaint to show the result of the row clearing
+                repaint();
             }
 
             // if the board is too tall, we've lost
@@ -579,9 +508,17 @@ public class JTetris extends JComponent {
         panel.add(Box.createVerticalStrut(12));
 
         // Buttons
-        buttonHelp = new JLabel("Help:");
-        panel.add(buttonHelp);
-        panel.add(Box.createVerticalStrut(200));
+        JLabel textHelp = new JLabel("Buttons:");
+        JLabel textLeft = new JLabel("LEFT: \"J\" or Numpad 4");
+        JLabel textRight = new JLabel("RIGHT: \"L\" or Numpad 6");
+        JLabel textDown = new JLabel("DOWN: \"N\" or Numpad 0");
+        JLabel textRotate = new JLabel("ROTATE: \"K\" or Numpad 5");
+        panel.add(textHelp);
+        panel.add(textLeft);
+        panel.add(textRight);
+        panel.add(textDown);
+        panel.add(textRotate);
+        panel.add(Box.createVerticalStrut(100));
 
         JButton quit = new JButton("Quit");
         panel.add(quit);
@@ -594,9 +531,4 @@ public class JTetris extends JComponent {
 
         return (panel);
     }
-
-    /**
-     * Creates a Window, installs the JTetris, install the controls in the WEST.
-     */
-
 }
