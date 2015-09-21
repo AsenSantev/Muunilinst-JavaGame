@@ -360,8 +360,6 @@ public class JTetris extends JComponent {
      * <p>
      * Before this is called, the piece is at some location in the board.
      * This advances the piece to be at its next location.
-     * <p>
-     * Overriden by the brain when it plays.
      */
     public void tick(int verb) {
         if (!gameOn) {
@@ -568,7 +566,9 @@ public class JTetris extends JComponent {
         row.add(new JLabel("Speed:"));
         speed = new JSlider(0, 200, 75);    // min, max, current
         speed.setPreferredSize(new Dimension(100, 15));
-        if (testMode) speed.setValue(200);    // max for test mode
+        if (testMode) {
+            speed.setValue(200);    // max for test mode
+        }
 
         updateTimer();
         row.add(speed);
@@ -588,52 +588,52 @@ public class JTetris extends JComponent {
     /**
      * Creates a Window, installs the JTetris, install the controls in the WEST.
      */
-    public static void main(String[] args)
-    {
-        JFrame frame = new JFrame("Tetris by Team Muunilinst");
-        JComponent container = (JComponent) frame.getContentPane();
-        container.setLayout(new BorderLayout());
-
-        // Set the metal look and feel
-        try {
-            UIManager.setLookAndFeel(
-                    UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception ignored) {
-        }
-
-        // Could create a JTetris
-        final int pixels = 16;
-        JTetris tetris = new JTetris(WIDTH * pixels + 2, (HEIGHT + TOP_SPACE) * pixels + 2);
-
-        container.add(tetris, BorderLayout.CENTER);
-
-        if (args.length != 0 && args[0].equals("test")) {
-            tetris.testMode = true;
-        }
-
-        Container panel = tetris.createControlPanel();
-
-        // Add the quit button last so it's at the bottom
-        panel.add(Box.createVerticalStrut(12));
-        JButton quit = new JButton("Quit");
-        panel.add(quit);
-        quit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-
-        container.add(panel, BorderLayout.EAST);
-        frame.pack();
-        frame.setVisible(true);
-
-        // Quit on window close
-        frame.addWindowListener(
-                new WindowAdapter() {
-                    public void windowClosing(WindowEvent e) {
-                        System.exit(0);
-                    }
-                }
-        );
-    }
+//    public static void main(String[] args)
+//    {
+//        JFrame frame = new JFrame("Tetris by Team Muunilinst");
+//        JComponent container = (JComponent) frame.getContentPane();
+//        container.setLayout(new BorderLayout());
+//
+//        // Set the metal look and feel
+//        try {
+//            UIManager.setLookAndFeel(
+//                    UIManager.getCrossPlatformLookAndFeelClassName());
+//        } catch (Exception ignored) {
+//        }
+//
+//        // Could create a JTetris
+//        final int pixels = 16;
+//        JTetris tetris = new JTetris(WIDTH * pixels + 2, (HEIGHT + TOP_SPACE) * pixels + 2);
+//
+//        container.add(tetris, BorderLayout.CENTER);
+//
+//        if (args.length != 0 && args[0].equals("test")) {
+//            tetris.testMode = true;
+//        }
+//
+//        Container panel = tetris.createControlPanel();
+//
+//        // Add the quit button last so it's at the bottom
+//        panel.add(Box.createVerticalStrut(12));
+//        JButton quit = new JButton("Quit");
+//        panel.add(quit);
+//        quit.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                System.exit(0);
+//            }
+//        });
+//
+//        container.add(panel, BorderLayout.EAST);
+//        frame.pack();
+//        frame.setVisible(true);
+//
+//        // Quit on window close
+//        frame.addWindowListener(
+//                new WindowAdapter() {
+//                    public void windowClosing(WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                }
+//        );
+//    }
 }
