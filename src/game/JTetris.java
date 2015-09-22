@@ -79,7 +79,7 @@ public class JTetris extends JComponent {
     protected JLabel timeLabel;
     protected JButton startButton;
     protected JButton stopButton;
-    protected javax.swing.Timer timer;
+    protected Timer timer;
     protected JSlider speed;
 
     public final int DELAY = 400;    // milliseconds per tick
@@ -451,6 +451,7 @@ public class JTetris extends JComponent {
     /**
      * Creates the panel of UI controls.
      */
+    // http://pastebin.com/s7cTC8Qn
     public Container createControlPanel() {
         Container panel = Box.createVerticalBox();
 
@@ -528,7 +529,7 @@ public class JTetris extends JComponent {
                 System.exit(0);
             }
         });
-
+        
         JPanel center = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTH;
@@ -537,7 +538,7 @@ public class JTetris extends JComponent {
         center.add(buttonPanel, gbc);
         panel.add(center, BorderLayout.CENTER);
         panel.add(Box.createHorizontalStrut(200));
-
+        
         return (panel);
     }
 }
