@@ -454,19 +454,19 @@ public class JTetris extends JComponent {
     public Container createControlPanel() {
         Container panel = Box.createVerticalBox();
 
+        JPanel buttonPanel = new JPanel(new GridLayout(14, 1));
+
         // COUNT
         countLabel = new JLabel("0");
-        panel.add(countLabel);
+        buttonPanel.add(countLabel);
 
         // TIME
         timeLabel = new JLabel(" ");
-        panel.add(timeLabel);
-
-        panel.add(Box.createVerticalStrut(12));
+        buttonPanel.add(timeLabel);
 
         // START button
         startButton = new JButton("Start");
-        panel.add(startButton);
+        buttonPanel.add(startButton);
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 startGame();
@@ -475,7 +475,7 @@ public class JTetris extends JComponent {
 
         // STOP button
         stopButton = new JButton("Stop");
-        panel.add(stopButton);
+        buttonPanel.add(stopButton);
         stopButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 stopGame();
@@ -484,9 +484,10 @@ public class JTetris extends JComponent {
 
         enableButtons();
 
-        JPanel row = new JPanel();
+        buttonPanel.add(Box.createVerticalStrut(12));
 
         // SPEED slider
+        JPanel row = new JPanel();
         panel.add(Box.createVerticalStrut(12));
         row.add(new JLabel("Speed:"));
         speed = new JSlider(0, 200, 75);    // min, max, current
@@ -495,9 +496,7 @@ public class JTetris extends JComponent {
 
         updateTimer();
         row.add(speed);
-
-        panel.add(row);
-
+        buttonPanel.add(row);
         speed.addChangeListener(new ChangeListener() {
             // when the slider changes, sync the timer to its value
             public void stateChanged(ChangeEvent e) {
@@ -505,7 +504,8 @@ public class JTetris extends JComponent {
             }
 
         });
-        panel.add(Box.createVerticalStrut(12));
+
+        buttonPanel.add(Box.createVerticalStrut(12));
 
         // Buttons
         JLabel textHelp = new JLabel("Buttons:");
@@ -513,21 +513,30 @@ public class JTetris extends JComponent {
         JLabel textRight = new JLabel("RIGHT: \"L\" or Numpad 6");
         JLabel textDown = new JLabel("DOWN: \"N\" or Numpad 0");
         JLabel textRotate = new JLabel("ROTATE: \"K\" or Numpad 5");
-        panel.add(textHelp);
-        panel.add(textLeft);
-        panel.add(textRight);
-        panel.add(textDown);
-        panel.add(textRotate);
-        panel.add(Box.createVerticalStrut(100));
+        buttonPanel.add(textHelp);
+        buttonPanel.add(textLeft);
+        buttonPanel.add(textRight);
+        buttonPanel.add(textDown);
+        buttonPanel.add(textRotate);
+
+        buttonPanel.add(Box.createVerticalStrut(12));
 
         JButton quit = new JButton("Quit");
-        panel.add(quit);
-        panel.add(Box.createVerticalStrut(20));
+        buttonPanel.add(quit);
         quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
+
+        JPanel center = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.weighty = 1;
+
+        center.add(buttonPanel, gbc);
+        panel.add(center, BorderLayout.CENTER);
+        panel.add(Box.createHorizontalStrut(200));
 
         return (panel);
     }
